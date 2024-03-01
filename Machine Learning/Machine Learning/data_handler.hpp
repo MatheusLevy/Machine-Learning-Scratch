@@ -37,5 +37,6 @@ class Data_Handler {
 		std::vector<Data*> * get_training_data();
 		std::vector<Data*> * get_validation_data();
 		std::vector<Data*> * get_testing_data();
+		std::vector<Data*> * get_data();
 };
 #endif

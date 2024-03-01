@@ -1,32 +1,6 @@
-﻿  data_handler.cpp
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(30,27): warning C4018: '<': incompatibilidade de signed/unsigned
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(53,16): warning C4477: 'printf': a cadeia de formato '%u' requer um argumento do tipo 'unsigned int', mas um argumento variadic 1 tem o tipo 'unsigned __int64'
-  C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(53,16):
-  considere usar '%zu' na cadeia de formato
-  
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(72,27): warning C4018: '<': incompatibilidade de signed/unsigned
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(84,16): warning C4477: 'printf': a cadeia de formato '%u' requer um argumento do tipo 'unsigned int', mas um argumento variadic 1 tem o tipo 'unsigned __int64'
-  C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(84,16):
-  considere usar '%zu' na cadeia de formato
-  
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(93,20): warning C4244: 'inicializando': conversão de 'double' para 'int', possível perda de dados
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(94,19): warning C4244: 'inicializando': conversão de 'double' para 'int', possível perda de dados
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(95,18): warning C4244: 'inicializando': conversão de 'double' para 'int', possível perda de dados
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(100,66): warning C4267: 'argumento': conversão de 'size_t' para '_Ty', possível perda de dados
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(100,66): warning C4267:         with
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(100,66): warning C4267:         [
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(100,66): warning C4267:             _Ty=int
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(100,66): warning C4267:         ]
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(135,12): warning C4477: 'printf': a cadeia de formato '%u' requer um argumento do tipo 'unsigned int', mas um argumento variadic 1 tem o tipo 'unsigned __int64'
-  C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(135,12):
-  considere usar '%zu' na cadeia de formato
-  
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(136,12): warning C4477: 'printf': a cadeia de formato '%u' requer um argumento do tipo 'unsigned int', mas um argumento variadic 1 tem o tipo 'unsigned __int64'
-  C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(136,12):
-  considere usar '%zu' na cadeia de formato
-  
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(137,12): warning C4477: 'printf': a cadeia de formato '%u' requer um argumento do tipo 'unsigned int', mas um argumento variadic 1 tem o tipo 'unsigned __int64'
-  C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(137,12):
+﻿  Machine Learning.cpp
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\Machine Learning.cpp(16,12): warning C4477: 'printf': a cadeia de formato '%u' requer um argumento do tipo 'unsigned int', mas um argumento variadic 1 tem o tipo 'unsigned __int64'
+  C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\Machine Learning.cpp(16,12):
   considere usar '%zu' na cadeia de formato
   
   Machine Learning.vcxproj -> C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\x64\Debug\Machine Learning.exe

@@ -18,36 +18,29 @@ void Data_Handler::read_feature_vector(std::string path) {
     uint32_t header[4]; // Magic | NUM_IMAGES | ROW_SIZE | COL_SIZE
     unsigned char bytes[4];
     FILE* f;
-    if (fopen_s(&f, path.c_str(), "r") == 0) {
+    if (fopen_s(&f, path.c_str(), "rb") == 0) {
         for (int i = 0; i < 4; i++) {
             if (fread(bytes, sizeof(bytes), 1, f)) {
                 header[i] = convert_to_little_endian(bytes);
             }
         }
-        // Now read the image bytes in the byte array
+        // Now read the image bytes 
         printf("Reading File Header: Done! \n");
         int image_size = header[2] * header[3];
         for (int i = 0; i < header[1]; i++) {
             Data* d = new Data();
             uint8_t element[1];
-            for (int j = 0; j < image_size; j++) {
-                while (!feof(f)) {
-                    if (fread(&element, sizeof(element), 1, f) == 1) {
-                        d->append_to_feature_vector(element[0]);
-                    }
-                    else {
-                        if (feof(f)) {
-                            break;
-                        }
-                        else {
-                            perror("Reading File Error");
-                            break;
-                        }
-                    }
+            int j = 0;
+            while(j< image_size){
+                fread(element, sizeof(element), 1, f);
+                d->append_to_feature_vector(element[0]);
+                if (ferror(f)) {
+                    perror("Erro de leitura do arquivo de vetores");
                 }
-
+                j++;
             }
-            data_array->push_back(d);
+            
+             data_array->push_back(d);
         }
         fclose(f);
         printf("Read Feature Vectors: Done with size %u \n", data_array->size());
@@ -167,4 +160,8 @@ uint32_t Data_Handler::convert_to_little_endian(const unsigned char* bytes) {
                       (bytes[1] << 16) |
                       (bytes[2] << 8) |
                       (bytes[3]));
+}
+
+std::vector<Data*>* Data_Handler::get_data() {
+    return data_array;
 }
