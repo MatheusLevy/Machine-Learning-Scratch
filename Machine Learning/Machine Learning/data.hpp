@@ -7,11 +7,13 @@
 
 
 class Data {
-	std::vector<uint8_t>* feature_vector; // No class at end
+	std::vector<uint8_t> *feature_vector; // No class at end
 	uint8_t label;
 	int enum_label;
 
 	public:
+		Data();
+		~Data();
 		void set_feature_vector(std::vector<uint8_t> *);
 		void append_to_feature_vector(uint8_t);
 		void set_label(uint8_t);
@@ -21,7 +23,7 @@ class Data {
 		uint8_t get_label();
 		uint8_t get_enumerated_label();
 
-		std::vector<uint8_t> get_feature_vector();
+		std::vector<uint8_t>* get_feature_vector();
 
 };
 #endif 

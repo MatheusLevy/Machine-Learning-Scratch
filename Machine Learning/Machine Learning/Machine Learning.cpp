@@ -1,8 +1,14 @@
 #include <iostream>
+#include <vector>
+#include "data_handler.hpp"
 
 int main()
 {
-    uint8_t meuUInt8 = -22;
-    std::cout << "Valor de meuUInt8: " << static_cast<int>(meuUInt8) << std::endl;
+    Data_Handler* dh = new Data_Handler();
+    dh->read_feature_vector("../../mnist/train-images.idx3-ubyte");
+    dh->read_feature_labels("../../mnist/train-labels.idx1-ubyte");
+    dh->split_data();
+    dh->count_classes();
 
+    return 0;
 }

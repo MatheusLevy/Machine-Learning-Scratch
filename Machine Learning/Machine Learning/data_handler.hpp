@@ -10,7 +10,7 @@
 #include <unordered_set>
 
 class Data_Handler {
-	std::vector<Data *> *data; // all data not splited
+	std::vector<Data *> *data_array; // all data not splited
 	std::vector<Data*> *training_data;
 	std::vector<Data*> *validation_data;
 	std::vector<Data*> *test_data;
@@ -34,8 +34,8 @@ class Data_Handler {
 
 		uint32_t convert_to_little_endian(const unsigned char *bytes);
 
-		std::vector<Data*> get_training_data();
-		std::vector<Data*> get_validation_data();
-		std::vector<Data*> get_testing_data();
+		std::vector<Data*> * get_training_data();
+		std::vector<Data*> * get_validation_data();
+		std::vector<Data*> * get_testing_data();
 };
 #endif
