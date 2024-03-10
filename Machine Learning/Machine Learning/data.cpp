@@ -39,3 +39,11 @@ uint8_t Data::get_enumerated_label() {
 std::vector<uint8_t>* Data::get_feature_vector() {
 	return feature_vector;
 }
+
+void Data::set_distance(double val) {
+	distance = val;
+}
+
+double Data::get_distance() {
+	return distance;
+}

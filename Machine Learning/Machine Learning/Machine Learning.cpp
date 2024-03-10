@@ -4,6 +4,7 @@
 #include <opencv2/opencv.hpp>
 using namespace cv;
 
+/*
 int main()
 {
     Data_Handler* dh = new Data_Handler();
@@ -24,3 +25,4 @@ int main()
     waitKey();
     return 0;
 }
+*/
