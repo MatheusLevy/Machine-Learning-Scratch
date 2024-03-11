@@ -1,3 +1,5 @@
-﻿  knn.cpp
-C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\knn.cpp(95,25): warning C4018: '<': incompatibilidade de signed/unsigned
+﻿  common.cpp
+  knn.cpp
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\knn.cpp(83,25): warning C4018: '<': incompatibilidade de signed/unsigned
+  Gerando Código...
   Machine Learning.vcxproj -> C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\x64\Debug\Machine Learning.exe
