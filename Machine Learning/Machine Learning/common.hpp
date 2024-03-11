@@ -13,7 +13,7 @@ class common_data {
 	public:
 	void set_training_data(std::vector<Data*>* vect);
 	void set_test_data(std::vector<Data*>* vect);
-	void set_valiation_data(std::vector<Data*>* vect);
+	void set_validation_data(std::vector<Data*>* vect);
 
 };
 #endif // !__COMMIN_HPP

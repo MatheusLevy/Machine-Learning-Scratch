@@ -140,6 +140,7 @@
     <ClCompile Include="common.cpp" />
     <ClCompile Include="data.cpp" />
     <ClCompile Include="data_handler.cpp" />
+    <ClCompile Include="kmeans.cpp" />
     <ClCompile Include="knn.cpp" />
     <ClCompile Include="Machine Learning.cpp" />
   </ItemGroup>
@@ -147,6 +148,7 @@
     <ClInclude Include="common.hpp" />
     <ClInclude Include="data.hpp" />
     <ClInclude Include="data_handler.hpp" />
+    <ClInclude Include="kmeans.hpp" />
     <ClInclude Include="knn.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

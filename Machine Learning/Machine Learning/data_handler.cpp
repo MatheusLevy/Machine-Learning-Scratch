@@ -140,7 +140,7 @@ void Data_Handler::count_classes() {
         }
         num_classes = count;
     }
-    printf("Extract Class Names: Done! Number of Classes: %u", num_classes);
+    printf("Extract Class Names: Done! Number of Classes: %u \n", num_classes);
 }
 
 std::vector<Data*>* Data_Handler::get_training_data() {
@@ -164,4 +164,8 @@ uint32_t Data_Handler::convert_to_little_endian(const unsigned char* bytes) {
 
 std::vector<Data*>* Data_Handler::get_data() {
     return data_array;
+}
+
+int Data_Handler::get_class_count() {
+    return num_classes;
 }

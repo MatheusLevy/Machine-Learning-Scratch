@@ -120,6 +120,7 @@ double knn::test_performance() {
 	return current_performace;
 }
 
+/*
 int main() {
 	Data_Handler* dh = new Data_Handler();
 	dh->read_feature_vector("../../mnist/train-images.idx3-ubyte");
@@ -128,11 +129,11 @@ int main() {
 	dh->count_classes();
 	knn* knearest = new knn();
 	knearest->set_training_data(dh->get_training_data());
-	knearest->set_valiation_data(dh->get_validation_data());
+	knearest->set_validation_data(dh->get_validation_data());
 	knearest->set_test_data(dh->get_testing_data());
 	double performance = 0;
 	double best_performance = 0;
 	int best_k = 1;
 	knearest->set_k(1);
 	knearest->validate_performance();
-}
+}*/
