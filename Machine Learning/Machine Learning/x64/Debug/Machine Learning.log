@@ -1,4 +1,8 @@
-﻿  data_handler.cpp
+﻿  Machine Learning.cpp
+  common.cpp
+  data.cpp
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data.cpp(28,29): warning C4267: 'return': conversão de 'size_t' para 'int', possível perda de dados
+  data_handler.cpp
 C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(30,27): warning C4018: '<': incompatibilidade de signed/unsigned
 C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(46,16): warning C4477: 'printf': a cadeia de formato '%u' requer um argumento do tipo 'unsigned int', mas um argumento variadic 1 tem o tipo 'unsigned __int64'
   C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(46,16):
@@ -29,4 +33,17 @@ C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learn
   C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(130,12):
   considere usar '%zu' na cadeia de formato
   
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\data_handler.cpp(201,79): warning C4267: '=': conversão de 'size_t' para 'int', possível perda de dados
+  kmeans.cpp
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\kmeans.hpp(29,21): warning C4267: 'inicializando': conversão de 'size_t' para 'int', possível perda de dados
+  (compilando o arquivo fonte 'kmeans.cpp')
+  
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\kmeans.cpp(13,67): warning C4267: 'argumento': conversão de 'size_t' para '_Ty', possível perda de dados
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\kmeans.cpp(13,67): warning C4267:         with
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\kmeans.cpp(13,67): warning C4267:         [
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\kmeans.cpp(13,67): warning C4267:             _Ty=int
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\kmeans.cpp(13,67): warning C4267:         ]
+  knn.cpp
+C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\Machine Learning\knn.cpp(83,25): warning C4018: '<': incompatibilidade de signed/unsigned
+  Gerando Código...
   Machine Learning.vcxproj -> C:\Users\levyb\Documents\Machine-Learning-Scratch\Machine Learning\x64\Debug\Machine Learning.exe

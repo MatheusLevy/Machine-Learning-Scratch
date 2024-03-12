@@ -18,6 +18,8 @@ class Data_Handler {
 	int num_classes;
 	int feature_vector_size;
 	std::map<uint8_t, int> class_map;
+	std::map<std::string, int> classMap;
+
 
 	const double TRAIN_SET_PERCENTE = 0.75;
 	const double TEST_SET_PERCENT = 0.20;
@@ -27,6 +29,7 @@ class Data_Handler {
 		Data_Handler();
 		~Data_Handler();
 
+		void read_csv(std::string path, std::string delimiter);
 		void read_feature_vector(std::string path);
 		void read_feature_labels(std::string path);
 		void split_data();

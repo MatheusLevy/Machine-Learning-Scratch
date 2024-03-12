@@ -138,7 +138,10 @@ void Data_Handler::count_classes() {
             data_array->at(i)->set_enumerated_label(count);
             count++;
         }
-        num_classes = count;
+    }
+    num_classes = count;
+    for (Data* data : *data_array) {
+        data->set_class_vector(num_classes);
     }
     printf("Extract Class Names: Done! Number of Classes: %u \n", num_classes);
 }
@@ -169,3 +172,32 @@ std::vector<Data*>* Data_Handler::get_data() {
 int Data_Handler::get_class_count() {
     return num_classes;
 }
+
+void Data_Handler::read_csv(std::string path, std::string delimiter) {
+    num_classes = 0;
+    std::ifstream data_file(path.c_str());
+    std::string line;
+    while (std::getline(data_file, line)) {
+        if (line.length() == 0) continue;
+        Data* data = new Data();
+        data->set_double_feature_vector(new std::vector<double>());
+        size_t position = 0;
+        std::string token;
+        while ((position = line.find(delimiter)) != std::string::npos) {
+            token = line.substr(0, position);
+            data->append_to_double_feature_vector(std::stod(token));
+            line.erase(0, position + delimiter.length());
+        }
+        if (classMap.find(line) != classMap.end()) {
+            data->set_label(classMap[line]);
+        }
+        else {
+            classMap[line] = num_classes;
+            data->set_label(classMap[line]);
+            num_classes++;
+        }
+        data_array->push_back(data);
+    }
+    feature_vector_size = data_array->at(0)->get_double_feature_vector()->size();
+}
+

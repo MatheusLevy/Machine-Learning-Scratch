@@ -148,8 +148,14 @@
     <ClInclude Include="common.hpp" />
     <ClInclude Include="data.hpp" />
     <ClInclude Include="data_handler.hpp" />
+    <ClInclude Include="hidden_layer.hpp" />
+    <ClInclude Include="input_layer.hpp" />
     <ClInclude Include="kmeans.hpp" />
     <ClInclude Include="knn.hpp" />
+    <ClInclude Include="layer.hpp" />
+    <ClInclude Include="network.hpp" />
+    <ClInclude Include="neuron.hpp" />
+    <ClInclude Include="output_layer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
