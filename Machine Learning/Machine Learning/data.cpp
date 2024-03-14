@@ -75,3 +75,15 @@ std::vector<int>* Data::get_class_vector() {
 std::vector<double>* Data::get_double_feature_vector() {
 	return double_feature_vector;
 }
+
+int Data::get_double_feature_vector_size() {
+	return double_feature_vector->size();
+}
+
+void Data::set_normalized_feature_vector(std::vector<double>* vect) {
+	normalized_feature_vector = vect;
+}
+
+std::vector<double>* Data::get_normalized_feature_vector() {
+	return normalized_feature_vector;
+}
