@@ -8,6 +8,10 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import torchvision
 from tqdm import tqdm
+from sklearn.metrics import confusion_matrix
+import sklearn
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 batch_size = 32
 learning_rate = 0.001
@@ -68,6 +72,28 @@ def check_accuracy(loader, model):
     model.train()
     return acc
 
+def calculate_classification_metrics(loader, model):
+    true = []
+    preds = []
+    model.eval()
+    with torch.no_grad():
+        for x, y in loader:
+            x = x.to(device)
+            y = y.to(device)
+
+            # Flatten if using only NN
+            # x = x.reshape(x.shape[0], -1)
+
+            scores = model(x)
+            # 64x10
+            _, predictions = scores.max(1)
+            true.extend(y)
+            preds.extend(predictions)
+    print(sklearn.metrics.classification_report(true, preds, digits=5))
+    conf_matrix = confusion_matrix(true, preds)
+    sns.heatmap(conf_matrix, annot=True,annot_kws={"size": 12},fmt='g', cbar=False, cmap="viridis")
+    plt.show()
+
 def save_checkpoint(state, filename= 'my_checkpoint.pth.tar'):
     print('=> saving checkpoint')
     torch.save(state, filename)
@@ -80,7 +106,7 @@ def load_checkpoint(checkpoint):
 for epoch in range(epochs):
     model.train()
     runningLoss = 0.0
-    loop = tqdm(enumerate(train_loader), total=len(train_loader), leave=False)
+    loop = tqdm(enumerate(train_loader), total=len(train_loader), leave=False, )
     checkpoint = {'state_dict': model.state_dict(), 'optimizer': optimizer.state_dict()}
     for batch_idx, (data, targets) in loop:
         # Send to device
@@ -104,7 +130,7 @@ for epoch in range(epochs):
         # update progress bar
         loop.set_description(f'Epoch [{epoch}/{epochs}]')
         loop.set_postfix(loss = loss.item())
-        
+
     save_checkpoint(checkpoint, filename= f'checkpoint_{epoch}.pth.tar')
     trainLoss = runningLoss/ len(train_loader)
     scheduler.step(trainLoss)
@@ -114,3 +140,5 @@ check_accuracy(train_loader, model)
 check_accuracy(test_loader, model)
 
 load_checkpoint(torch.load('checkpoint_0.pth.tar'))
+
+calculate_classification_metrics(test_loader, model)
