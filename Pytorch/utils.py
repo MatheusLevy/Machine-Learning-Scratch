@@ -3,6 +3,7 @@ from sklearn.metrics import roc_auc_score
 import json
 import pickle
 import os
+from tqdm import tqdm
 
 def save_checkpoint(state, filename= 'my_checkpoint.pth.tar'):
     print('=> saving checkpoint')
@@ -49,3 +50,28 @@ def store_test_metrics(var, path, filename="test_metrics", name="", json=False, 
         auc_macro = var['auc_macro']
         add_data(path=result_path, uuid=name, result=auc_macro)
         pass
+
+def check_auc(loader, model, device, labels, save= False, Train= True):
+    if Train:
+        print('Checking auc on training data')
+    else:
+        print('Checking auc on val/test data')
+    model.eval()
+    trues, preds_all = [], []
+    loop = tqdm(enumerate(loader), total=len(loader), leave=False)
+    for i, (data, targets) in loop:
+        data = data.to(device)
+        targets.to(device)
+        scores = model(data)
+        preds = torch.sigmoid(scores)
+        trues.extend(targets.cpu().tolist())
+        preds_all.extend(preds.cpu().tolist())
+    results = evaluate_classification_model(trues, preds_all, labels)
+    auc = results['auc_scores']
+    auc_macro = results['auc_macro']
+    auc_micro = results['auc_micro']
+    auc_weighted = results['auc_weighted']
+    print(f'AUC: {auc} Auc-Macro: {auc_macro} Auc-Micro: {auc_micro} Auc-Weighted: {auc_weighted}')
+    if save:
+        store_test_metrics(results, path='/home/matheus_levy/workspace/pytorch_study/metrics',
+                            filename=f"metrics_global", name='model', json=True, result_path='/home/matheus_levy/workspace/pytorch_study/metrics/result.json')
