@@ -41,17 +41,22 @@ class Naive_Bayes:
             probs[:, c] = probs_c + np.log(prior)
         return np.argmax(probs, 1)
 
-    def density(self, X, mean, sigma):
-        # calculate probability from gaussian density function (normal distribution)
+    def density(self, x, mean, sigma):
         # (2pi)^(k/2)det(sum)^(-1/2)exp(-1/2(x-mu)^Tsum^(-1)(x-mu))
-        const = -self.num_features/2 * np.log(2*np.pi) - 0.5 * np.sum(np.log(sigma))
-        probs = 0.5 * np.sum(np.power(X-mean, 2) / sigma+self.eps, 1)
+        # Calculate probability from Gaussian density function
+        const = -self.num_features / 2 * np.log(2 * np.pi) - 0.5 * np.sum(
+            np.log(sigma + self.eps)
+        )
+        probs = 0.5 * np.sum(np.power(x - mean, 2) / (sigma + self.eps), 1)
         return const - probs
     
-X = np.loadtxt(r'data\data.txt', delimiter=',')
-y = np.loadtxt(r'data\targets.txt')-1
+# X = np.loadtxt(r'data\data.txt', delimiter=',')
+# y = np.loadtxt(r'data\targets.txt')-1
+X = np.load('data/X.npy')
+y = np.load('data/y.npy')
 print(X.shape, y.shape)
 nb = Naive_Bayes(X, y)
 nb.fit(X, y)
 print(nb.predict(X))
 print(sum(nb.predict(X) == y)/y.shape[0])
+print(sum(y)/y.shape[0])
