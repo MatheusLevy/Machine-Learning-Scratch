@@ -49,6 +49,9 @@ n_classes = 14
 
 labels = ['Atelectasis', 'Cardiomegaly', 'Consolidation', 'Edema', 'Effusion', 'Emphysema', 'Fibrosis', 'Hernia' , 'Infiltration' , 'Mass' ,'Nodule', 'Pleural_Thickening' , 'Pneumonia,Pneumothorax']
 
+data_csv = pd.read_csv('/home/matheus_levy/workspace/lucas/dataset/data.csv')
+data_csv = data_csv.drop(columns=['No Finding'])
+
 train_csv = pd.read_csv('/home/matheus_levy/workspace/lucas/dataset/df_train.csv')
 train_csv = train_csv.drop(columns=['No Finding'])
 
