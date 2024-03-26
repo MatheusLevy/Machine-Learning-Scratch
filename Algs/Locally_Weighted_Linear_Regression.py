@@ -16,12 +16,13 @@ import numpy as np
 # https://www.youtube.com/watch?v=4b4MUYve_U8
 
 class Linear_Regression():
-    def __init__(self, X, y, alpha, num_iter):
+    def __init__(self, X, y, alpha, num_iter, tau):
         self.theta = np.zeros((X.shape[1] + 1, 1)) # theta is a vector of parameters for each feature plus one for the bias
         self.alpha = alpha
         self.num_iter = num_iter
         self.X = X
         self.y = y
+        self.tau = tau 
 
     def h_x(self, X):
         ones = np.ones((X.shape[0], 1))
@@ -33,11 +34,21 @@ class Linear_Regression():
         h = self.h_x(X) # prediction for each sample as a vector
         return 1/(2*m) * np.sum(np.square(h - y)) # J(theta) = 1/2m * sum(h(x) - y)^2
 
+    def calculate_weights(self, X_query):
+        m = self.X.shape[0]
+        weights = np.zeros((m, m))
+        for i in range(m):
+            weights[i, i] = np.exp(-np.sum((X_query - self.X[i])**2) / (2 * self.tau**2))
+        return weights
+    
     def gradient_descent(self):
         m = self.X.shape[0]
+        W = self.calculate_weights(self.X)
+       
         for _ in range(self.num_iter):
             error = self.h_x(self.X) - self.y
-            print
+            error= np.dot(W, error) 
+            
             # Att weights 
             self.theta[0] = self.theta[0] - self.alpha * 1/m * np.sum(error)
             self.theta[1:] = self.theta[1:] - self.alpha * 1/m * np.dot(self.X.T, error)
@@ -45,9 +56,9 @@ class Linear_Regression():
             print(self.loss(self.X, self.y))
 
         
-X = np.array([[1,4], [2,8], [3,12], [4,16]])
-y=  np.array([[2], [4], [6], [8]])
+X = np.array([[1,4], [2,8], [3,12], [4,16], [5, 20], [6, 24],])
+y=  np.array([ [2],    [4],    [6],    [8],    [10],  [12], ])
 
-lr = Linear_Regression(X, y, 0.01, 1000)
+lr = Linear_Regression(X, y, 0.01, 5000, 10) # The data is not normalized so larger tao is needed to avoid underfitting
 lr.gradient_descent()
-print(lr.h_x(np.array([[5, 20]])))
+print(lr.h_x(np.array([[7,28]])))
