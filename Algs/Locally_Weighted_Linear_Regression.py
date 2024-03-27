@@ -24,12 +24,19 @@ class Linear_Regression():
         self.y = y
         self.tau = tau 
 
+    def h_x_fit(self, X):
+        W = self.calculate_weights(X)
+        self.gradient_descent(W)
+        ones = np.ones((X.shape[0], 1))
+        concat = np.concatenate([ones, X], axis=1)
+        return np.dot(concat, self.theta)
+    
     def h_x(self, X):
         ones = np.ones((X.shape[0], 1))
         concat = np.concatenate([ones, X], axis=1)
         return np.dot(concat, self.theta)
-
-    def loss (self, X, y):
+    
+    def loss (self, X, y): 
         m = X.shape[0] # num of Samples
         h = self.h_x(X) # prediction for each sample as a vector
         return 1/(2*m) * np.sum(np.square(h - y)) # J(theta) = 1/2m * sum(h(x) - y)^2
@@ -41,9 +48,8 @@ class Linear_Regression():
             weights[i, i] = np.exp(-np.sum((X_query - self.X[i])**2) / (2 * self.tau**2))
         return weights
     
-    def gradient_descent(self):
+    def gradient_descent(self, W):
         m = self.X.shape[0]
-        W = self.calculate_weights(self.X)
        
         for _ in range(self.num_iter):
             error = self.h_x(self.X) - self.y
@@ -56,9 +62,9 @@ class Linear_Regression():
             print(self.loss(self.X, self.y))
 
         
-X = np.array([[1,4], [2,8], [3,12], [4,16], [5, 20], [6, 24],])
-y=  np.array([ [2],    [4],    [6],    [8],    [10],  [12], ])
+X = np.array([[1,4], [2,8], [3,12], [4,16], [5,20], [6,24], [7,28], [8,32], [9,36], [10,40], [11,44], [12,48], [13,52], [14,56], [15,60], [16,64], [17,68], [18,72], [19,76], [20,80]])
+y=  np.array([ [2],   [4],   [6],   [8],   [10],   [12],   [14],   [16],   [18],   [20],   [22],   [24],   [26],   [28],   [30],   [32],   [34],   [36],   [38],   [40]])
 
-lr = Linear_Regression(X, y, 0.01, 5000, 10) # The data is not normalized so larger tao is needed to avoid underfitting
-lr.gradient_descent()
-print(lr.h_x(np.array([[7,28]])))
+lr = Linear_Regression(X, y, 0.01, 50, 3) # The data is not normalized so larger tao is needed to avoid underfitting
+# lr.gradient_descent()
+print(lr.h_x_fit(np.array([[21, 84]])))
