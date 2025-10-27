@@ -1,2 +1,87 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.idea/
+.vscode/
+*.code-workspace
+
+# C++
+*.out
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Visual Studio
 .vs/
+*.user
+*.suo
+*.sln.docstates
+x64/
+Debug/
+Release/
+*.pdb
+*.ilk
+*.log
+*.tlog
+*.idb
+*.recipe
+*.Build.CppClean.log
+*.FileListAbsolute.txt
+*.lastbuildstate
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+
+# MNIST data
 .mnist/
+
+# Model checkpoints (uncomment if needed)
+# *.pth
+# *.pt
+# *.h5
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
