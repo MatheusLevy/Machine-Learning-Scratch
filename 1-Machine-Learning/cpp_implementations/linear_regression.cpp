@@ -1,15 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <eigen3/Eigen/Dense>
 
-
-double LR = 0.01; 
+double LR = 0.01;
 
 /*
     theta_j = theta_j - lr * (error)*xj
 
 */
-double gradient_j(std::vector<double>& pred, std::vector<double>& y, std::vector<std::vector<double>>& X, int j){
+double gradient_j(const Eigen::Ref<const Eigen::VectorXd>& pred, const Eigen::Ref<const Eigen::VectorXd>& y, const Eigen::Ref<const Eigen::MatrixX2d>& X, int j){
     double sum = 0;
     double error;
     for (int i=0; i<pred.size(); i++){
@@ -17,14 +17,14 @@ double gradient_j(std::vector<double>& pred, std::vector<double>& y, std::vector
         if (j == 0) {
             sum += error; // x0 is always 1 for the intercept term
         } else {
-            sum += error * X[j-1][i]; // X[j-1] because X is 0-indexed and j starts from 1
+            sum += error * X(i, j-1); // X(i, j-1): sample i, feature j-1
         }
     }
     return sum / pred.size();
 }
 
-void gradient_descent(std::vector<std::vector<double>>& X, std::vector<double>& y,
-                      std::vector<double>& pred, std::vector<double>& params){
+void gradient_descent(const Eigen::Ref<const Eigen::MatrixX2d>& X, const Eigen::Ref<const Eigen::VectorXd>& y,
+                      const Eigen::Ref<const Eigen::VectorXd>& pred, Eigen::Vector3d& params){
     for (int j=0; j<params.size(); j++){
         params[j] -= LR * gradient_j(pred, y, X, j);
     }
@@ -36,26 +36,22 @@ double normalize_min_max(double value, double min, double max) {
 
 class LinearRegression {
     public:
-        std::vector<double> coefficients;
-        
-        LinearRegression(int number_of_features) {
-            coefficients.resize(number_of_features + 1, 0.0);
-        };
+        Eigen::Vector3d coefficients = Eigen::Vector3d::Zero();
 
-        std::vector<double> predict(std::vector<std::vector<double>>& X) {
-            std::vector<double> preds(X[0].size(), 0.0);
-            for (int i=0; i<X[0].size(); i++){
+        Eigen::VectorXd predict(const Eigen::Ref<const Eigen::MatrixX2d>& X) {
+            Eigen::VectorXd preds(X.rows());
+            for (int i=0; i<X.rows(); i++){
                 double pred = coefficients[0]; // Intercept term
-                for (int j=0; j<X.size(); j++){
-                    pred += coefficients[j+1] * X[j][i];
+                for (int j=0; j<X.cols(); j++){
+                    pred += coefficients[j+1] * X(i, j);
                 }
                 preds[i] = pred;
             }
             return preds;
         }
 
-        void fit(std::vector<std::vector<double>>& X, std::vector<double>& y, int iterations) {
-            std::vector<double> pred(X[0].size(), 0.0);
+        void fit(Eigen::Matrix<double, 3, 2>& X, Eigen::Matrix<double, 3, 1>& y, int iterations) {
+            Eigen::VectorXd pred;
             for (int iter=0; iter<iterations; iter++){
                 pred = predict(X);
                 gradient_descent(X, y, pred, coefficients);
@@ -73,37 +69,41 @@ class LinearRegression {
         }
 };
 
-int main(){
-    // House data: features in rows, samples in columns
-    // X = {ft² across all samples, bedrooms across all samples}
-    std::vector<std::vector<double>> X = {
-        {1200, 1500, 1800},  // ft² for each sample
-        {2, 3, 3}             // bedrooms for each sample
-    };
-    std::vector<double> y = {200000, 250000, 300000};
-
-    // Normaliza cada feature (linha) com min-max
-    for (int j = 0; j < X.size(); j++) {
-        double min = *std::min_element(X[j].begin(), X[j].end());
-        double max = *std::max_element(X[j].begin(), X[j].end());
-        for (int i = 0; i < X[j].size(); i++) {
-            X[j][i] = normalize_min_max(X[j][i], min, max);
+void normalize_features(Eigen::Matrix<double, 3, 2>& X) {
+    for (int j = 0; j < X.cols(); j++) {
+        double min = X.col(j).minCoeff();
+        double max = X.col(j).maxCoeff();
+        for (int i = 0; i < X.rows(); i++) {
+            X(i, j) = (X(i, j) - min) / (max - min);
         }
     }
+}
 
-    LinearRegression model(X.size());
-    std::vector<double> predictions = model.predict(X);
-    std::cout << "Initial predictions: ";
-    for (double pred : predictions) {
-        std::cout << pred << " ";
+void normalize_labels(Eigen::Matrix<double, 3, 1>& y) {
+    double min = y.minCoeff();
+    double max = y.maxCoeff();
+    for (int i = 0; i < y.size(); i++) {
+        y(i) = (y(i) - min) / (max - min);
     }
-    std::cout << std::endl;
-    model.fit(X, y, 100000);
-    predictions = model.predict(X);
-    std::cout << "Predictions after training: ";
-    for (double pred : predictions) {
-        std::cout << pred << " ";
-    }
-    std::cout << std::endl;
+}
+
+int main(){
+    Eigen::Matrix<double, 3, 2> x;
+    x << 
+        2, 120,
+        3, 150,
+        3, 180;
+    normalize_features(x);
+    std::cout << "Normalized features:\n" << x << std::endl;
+    Eigen::Matrix<double, 3, 1> y;
+    y << 200000, 250000, 300000;
+    double y_min = y.minCoeff(), y_max = y.maxCoeff();
+    normalize_labels(y);
+    std::cout << "Normalized labels:\n" << y << std::endl;
+    LinearRegression model;
+    model.fit(x, y, 10000);
+    Eigen::VectorXd predictions = model.predict(x);
+    predictions = predictions.array() * (y_max - y_min) + y_min;
+    std::cout << "Predictions:\n" << predictions << std::endl;
     return 0;
 }
