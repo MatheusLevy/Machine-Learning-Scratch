@@ -92,6 +92,8 @@ Eigen::MatrixXd computeOpticalFlow(const std::vector<cv::Mat>& grad_x_mean_vec, 
     std::vector<Eigen::MatrixXd> It = convertVectorOfCvMatToEigen(grad_t_vec);
 
     Eigen::MatrixXd flows(Ix.size(), 2);
+    int valid_count = 0;
+    int invalid_count = 0;
     for (size_t i = 0; i < Ix.size(); ++i) {
         Eigen::Matrix2d A = A_Matrix(Ix[i], Iy[i]);
         Eigen::Vector2d b = b_Vector(Ix[i], Iy[i], It[i]);
@@ -100,6 +102,7 @@ Eigen::MatrixXd computeOpticalFlow(const std::vector<cv::Mat>& grad_x_mean_vec, 
         if (es.info() != Eigen::Success) {
             flows(i, 0) = 0.0;
             flows(i, 1) = 0.0;
+            invalid_count++;
             continue;
         }
 
@@ -114,45 +117,47 @@ Eigen::MatrixXd computeOpticalFlow(const std::vector<cv::Mat>& grad_x_mean_vec, 
         if (isIllConditioned) {
             flows(i, 0) = 0.0;
             flows(i, 1) = 0.0;
+            invalid_count++;
             continue;
         }
 
         Eigen::Vector2d flow_vector = A.ldlt().solve(b);
         flows(i, 0) = flow_vector(0);
         flows(i, 1) = flow_vector(1);
+        valid_count++;
     }
+
+    std::cout << "Patches validos: " << valid_count << std::endl;
+    std::cout << "Patches invalidos: " << invalid_count << std::endl;
     return flows;
 }
 
-void visualizeOpticalFlowFromMatrix(const cv::Mat& img, 
-                                     const Eigen::MatrixXd& flow,
-                                     const int patchSize) {
+void visualizeOpticalFlowFromMatrix(const cv::Mat& img,
+                                    const Eigen::MatrixXd& flow,
+                                    const int patchSize,
+                                    const int stride) {
     cv::Mat flow_viz = img.clone();
     flow_viz.convertTo(flow_viz, CV_8U);
     cv::cvtColor(flow_viz, flow_viz, cv::COLOR_GRAY2BGR);
     
     int patch_idx = 0;
-    for (int i = 0; i <= img.rows - patchSize; i += patchSize) {
-        for (int j = 0; j <= img.cols - patchSize; j += patchSize) {
-            if (patch_idx >= flow.rows()) break;
-            
-            // Extrair (u, v) da matriz
+    for (int i = 0; i <= img.rows - patchSize && patch_idx < flow.rows(); i += stride) {
+        for (int j = 0; j <= img.cols - patchSize && patch_idx < flow.rows(); j += stride) {
             double u = flow(patch_idx, 0);
             double v = flow(patch_idx, 1);
-            
-            // Centro do patch
-            cv::Point center(j + patchSize/2, i + patchSize/2);
-            cv::Point end(center.x + u * 5, center.y + v * 5);  // amplificar
-            
-            // Magnitude para colorir
             double magnitude = std::sqrt(u*u + v*v);
-            cv::Scalar color = magnitude > 1.0 ? 
-                cv::Scalar(0, 0, 255) :  // vermelho (movimento rápido)
-                cv::Scalar(0, 255, 0);   // verde (movimento lento)
-            
-            // Desenhar seta
-            cv::arrowedLine(flow_viz, center, end, color, 2, cv::LINE_AA, 0, 0.3);
-            cv::circle(flow_viz, center, 3, cv::Scalar(255, 255, 0), -1);  // ponto azul
+
+            if (magnitude >= 0.2) {
+                cv::Point center(j + patchSize/2, i + patchSize/2);
+                cv::Point end(center.x + static_cast<int>(u * 5.0),
+                              center.y + static_cast<int>(v * 5.0));
+
+                cv::Scalar color = magnitude > 1.0 ?
+                    cv::Scalar(0, 0, 255) :
+                    cv::Scalar(0, 255, 0);
+
+                cv::arrowedLine(flow_viz, center, end, color, 2, cv::LINE_AA, 0, 0.3);
+            }
             
             patch_idx++;
         }
@@ -162,11 +167,11 @@ void visualizeOpticalFlowFromMatrix(const cv::Mat& img,
 }
 
 int main() {
-    cv::Mat img1 = cv::imread("frame1.jpg", cv::IMREAD_GRAYSCALE);
-    cv::Mat img2 = cv::imread("frame2.jpg", cv::IMREAD_GRAYSCALE);
+    cv::Mat img1 = cv::imread("frame1.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat img2 = cv::imread("frame2.png", cv::IMREAD_GRAYSCALE);
 
     if (img1.empty() || img2.empty()) {
-        std::cerr << "Erro: Nao foi possivel carregar as imagens frame1.jpg e/ou frame2.jpg!" << std::endl;
+        std::cerr << "Erro: Nao foi possivel carregar as imagens frame1.png e/ou frame2.png!" << std::endl;
         return -1;
     }
 
@@ -177,21 +182,19 @@ int main() {
     img2.convertTo(img2, CV_64F);
 
     const int PATCH_SIZE = 20;
+    const int STRIDE = 10;
 
     cv::Mat grad_x_img1 = Ix(img1);
     cv::Mat grad_y_img1 = Iy(img1);
     cv::Mat grad_x_img2 = Ix(img2);
     cv::Mat grad_y_img2 = Iy(img2);
 
-    std::vector<cv::Mat> patches1 = patchImage(img1, PATCH_SIZE);
-    std::vector<cv::Mat> patches2 = patchImage(img2, PATCH_SIZE);
-    std::cout << "Numero de patches na imagem 1: " << patches1.size() << std::endl;
-    std::cout << "Numero de patches na imagem 2: " << patches2.size() << std::endl;
-    std::vector<cv::Mat> grad_x_f1 = patchImage(grad_x_img1, PATCH_SIZE);
-    std::vector<cv::Mat> grad_y_f1 = patchImage(grad_y_img1, PATCH_SIZE);
-    std::vector<cv::Mat> grad_t = It(patches1, patches2);
-    std::vector<cv::Mat> grad_x_f2 = patchImage(grad_x_img2, PATCH_SIZE);
-    std::vector<cv::Mat> grad_y_f2 = patchImage(grad_y_img2, PATCH_SIZE);
+    std::vector<cv::Mat> grad_x_f1 = patchImage(grad_x_img1, PATCH_SIZE, STRIDE);
+    std::vector<cv::Mat> grad_y_f1 = patchImage(grad_y_img1, PATCH_SIZE, STRIDE);
+    cv::Mat grad_t_img = img2 - img1;
+    std::vector<cv::Mat> grad_t = patchImage(grad_t_img, PATCH_SIZE, STRIDE);
+    std::vector<cv::Mat> grad_x_f2 = patchImage(grad_x_img2, PATCH_SIZE, STRIDE);
+    std::vector<cv::Mat> grad_y_f2 = patchImage(grad_y_img2, PATCH_SIZE, STRIDE);
     std::vector<cv::Mat> grad_x_mean = meanGradients(grad_x_f1, grad_x_f2);
     std::vector<cv::Mat> grad_y_mean = meanGradients(grad_y_f1, grad_y_f2);
 
@@ -199,6 +202,6 @@ int main() {
     std::cout << "Numero de gradientes Iy (mean): " << grad_y_mean.size() << std::endl;
     std::cout << "Numero de gradientes It: " << grad_t.size() << std::endl;
     Eigen::MatrixXd flow = computeOpticalFlow(grad_x_mean, grad_y_mean, grad_t);
-    visualizeOpticalFlowFromMatrix(img1, flow, PATCH_SIZE);
+    visualizeOpticalFlowFromMatrix(img1, flow, PATCH_SIZE, STRIDE);
     return 0;
 }
